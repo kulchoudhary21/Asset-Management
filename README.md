@@ -1,0 +1,1 @@
+->creating seeder in with nodejs and mysql
