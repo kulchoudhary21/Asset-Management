@@ -50,16 +50,48 @@ con.query(seedQuery, [hash], (err) => {
 });
 
 // login api
-app.get("/login", (req, resp) => {
+// app.get("/login", (req, resp) => {
+//   const query = "select * from admin";
+//   con.query(query, (err, data) => {
+//     if (err) throw err;
+//     resp.status(200).json({
+//       status: "success",
+//       length: data?.length,
+//       data: data,
+//     });
+//   });
+// });
+
+//post api
+app.post("/login", (req, resp, next) => {
+  console.log("inside..");
   const query = "select * from admin";
   con.query(query, (err, data) => {
     if (err) throw err;
-    resp.status(200).json({
-      status: "success",
-      length: data?.length,
-      data: data,
-    });
+    let obj = {};
+    console.log(data[1].email);
+    for (let item in data[1]) {
+      if (item != "email" && item != "passwd") {
+         console.log("item:",item,"  data[1]:",data[1][item])
+        obj[item] = data[1][item];
+        console.log(obj)
+      }
+    }
+
+    if (pw == req.body.passwd && data[1].email==req.body.email) {
+      resp.status(200).json({
+        status: "success",
+        // length: data?.length,
+        data: obj,
+      });
+    } else {
+      resp.status(200).json({
+        status: "error",
+        data: {},
+      });
+    }
+    console.log(req.body);
   });
 });
 
-app.listen(3000);
+app.listen(3001);
