@@ -1,15 +1,9 @@
-var mysql = require("mysql");
+const mysql = require("mysql");
 const express = require("express");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
-const fs = require("fs");
+const pw = require("./seeders/20230606095710-admin-add");
 
-//load env variables
-require("dotenv").config();
-const seedQuery = fs.readFileSync("./seeding.sql", {
-  encoding: "utf-8",
-});
-
+console.log(pw);
 const app = express();
 var corsOptions = {
   origin: "https:localhost:1234",
@@ -34,19 +28,6 @@ con.connect((err) => {
   }
   console.log("Connected..");
 });
-//seeding..
-let pw = "123";
-let hash = bcrypt.hashSync(pw, 3);
-console.log(hash);
-console.log("Ruunning seed...");
-con.query(seedQuery, [hash], (err) => {
-  console.log("--------");
-  if (err) {
-    console.log("ee..", err);
-  } else {
-    console.log("Sql seed completed for passwd for initial account", pw);
-  }
-});
 //post api
 app.post("/login", (req, resp, next) => {
   const query = "select * from admin";
@@ -58,7 +39,7 @@ app.post("/login", (req, resp, next) => {
         obj[item] = data[1][item];
       }
     }
-    if (pw == req.body.passwd && data[1].email==req.body.email) {
+    if (pw == req.body.passwd && data[1].email == req.body.email) {
       resp.status(200).json({
         status: "success",
         data: obj,

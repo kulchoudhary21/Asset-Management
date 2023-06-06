@@ -1,7 +1,10 @@
 "use strict";
-var mysql = require("mysql");
+var bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
+
+let pw = "123";
+let hash = bcrypt.hashSync(pw, 3);
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -18,9 +21,9 @@ module.exports = {
       [
         {
           name: "hii",
-          contact:'12345',
-          email:"kk@gmail.com",
-          passwd:'123'
+          contact: "12345",
+          email: "kul@gmail.com",
+          passwd: hash,
         },
       ],
       {}
@@ -36,3 +39,4 @@ module.exports = {
      */
   },
 };
+module.exports=pw
