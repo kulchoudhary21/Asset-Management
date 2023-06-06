@@ -1,9 +1,9 @@
 const mysql = require("mysql");
 const express = require("express");
 const cors = require("cors");
-const pw = require("./seeders/20230606095710-admin-add");
+const pw = require("./configuration/passwd");
 
-console.log(pw);
+console.log(typeof pw);
 const app = express();
 var corsOptions = {
   origin: "https:localhost:1234",
@@ -34,12 +34,12 @@ app.post("/login", (req, resp, next) => {
   con.query(query, (err, data) => {
     if (err) throw err;
     let obj = {};
-    for (let item in data[1]) {
+    for (let item in data[0]) {
       if (item != "email" && item != "passwd") {
-        obj[item] = data[1][item];
+        obj[item] = data[0][item];
       }
     }
-    if (pw == req.body.passwd && data[1].email == req.body.email) {
+    if (pw == req.body.passwd && data[0].email == req.body.email) {
       resp.status(200).json({
         status: "success",
         data: obj,

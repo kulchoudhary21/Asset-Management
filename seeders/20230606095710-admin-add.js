@@ -1,10 +1,9 @@
 "use strict";
-var bcrypt = require("bcrypt");
-
-/** @type {import('sequelize-cli').Migration} */
-
-let pw = "123";
+let bcrypt = require("bcrypt");
+let pw = require("../configuration/passwd");
 let hash = bcrypt.hashSync(pw, 3);
+/** @type {import('sequelize-cli').Migration} */
+console.log(pw)
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -16,14 +15,16 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    return await queryInterface.bulkInsert(
+
+    await queryInterface.bulkInsert(
       "admin",
       [
         {
-          name: "hii",
-          contact: "12345",
+          name: "kuldeep",
+          contact: "123456789",
           email: "kul@gmail.com",
-          passwd: hash,
+          passwd: `${hash}`,
+          isDelete: "false",
         },
       ],
       {}
@@ -39,4 +40,4 @@ module.exports = {
      */
   },
 };
-module.exports=pw
+// module.exports=pw
