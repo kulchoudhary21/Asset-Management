@@ -1,21 +1,17 @@
 const mysql = require("mysql");
+const bcrypt = require("bcrypt");
 const express = require("express");
-const cors = require("cors");
-const pw = require("./configuration/passwd");
-
-console.log(typeof pw);
 const app = express();
+var cors = require("cors");
+
 var corsOptions = {
   origin: "https:localhost:1234",
 };
 app.use(cors(corsOptions));
-
 // parse requests of content-type - application/json
 app.use(express.json());
-
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -24,33 +20,47 @@ var con = mysql.createConnection({
 });
 con.connect((err) => {
   if (err) {
-    console.log("errr,,,", err);
+    console.error("error connecting: " + err.stack);
+    return;
+  } else {
+    console.log("Connecetd...");
   }
-  console.log("Connected..");
 });
+
 //post api
 app.post("/login", (req, resp, next) => {
-  const query = "select * from admin";
-  con.query(query, (err, data) => {
-    if (err) throw err;
-    let obj = {};
-    for (let item in data[0]) {
-      if (item != "email" && item != "passwd") {
-        obj[item] = data[0][item];
-      }
+  const query1 = `select * from admin where email='${req.body.email}'`;
+  con.query(query1, (err, data) => {
+    if (err) {
+      console.log("Error in query..", err);
     }
-    if (pw == req.body.passwd && data[0].email == req.body.email) {
-      resp.status(200).json({
-        status: "success",
-        data: obj,
-      });
+    let obj = {};
+    if (data && data.length != 0) {
+      const check = bcrypt.compareSync(req.body.passwd, data[0].passwd);
+      if (check) {
+        for (let item in data[0]) {
+          if (item != "passwd" && item != "isDelete" && item != "contact") {
+            obj[item] = data[0][item];
+          }
+        }
+        resp.status(200).json({
+          status: "success",
+          data: obj,
+        });
+      } else {
+        resp.status(401).json({
+          status: "Unauthorized",
+          msg: "Invalid password",
+          data: obj,
+        });
+      }
     } else {
-      resp.status(200).json({
-        status: "error",
-        data: {},
+      resp.status(401).json({
+        status: "Unauthorized",
+        msg: "Invalid email",
+        data: obj,
       });
     }
   });
 });
-
 app.listen(3001);

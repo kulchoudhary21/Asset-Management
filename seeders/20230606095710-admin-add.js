@@ -3,19 +3,8 @@ let bcrypt = require("bcrypt");
 let pw = require("../configuration/passwd");
 let hash = bcrypt.hashSync(pw, 3);
 /** @type {import('sequelize-cli').Migration} */
-console.log(pw)
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
-
     await queryInterface.bulkInsert(
       "admin",
       [
@@ -40,4 +29,3 @@ module.exports = {
      */
   },
 };
-// module.exports=pw
