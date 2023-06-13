@@ -1,66 +1,49 @@
-const mysql = require("mysql");
-const bcrypt = require("bcrypt");
 const express = require("express");
 const app = express();
-var cors = require("cors");
-
-var corsOptions = {
-  origin: "https:localhost:1234",
+const cors = require("cors");
+const login = require("./API/login/login");
+const postCategory = require("./API/category/postCategory");
+const getCategory = require("./API/category/getCategory");
+const postEmployee = require("./API/employee/createEmployee");
+const deleteCategory=require("./API/category/deleteCategory")
+const editCategory=require("./API/category/editCategory");
+const corsOption = {
+  credentials: true,
+  origin: "http://localhost:1234",
+  optionsSuccessStatus: 200, // For legacy browser support
+  methods: "GET, PUT,POST",
 };
-app.use(cors(corsOptions));
-// parse requests of content-type - application/json
+app.use(cors(corsOption));
 app.use(express.json());
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Admin@123",
-  database: "assets",
-});
-con.connect((err) => {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  } else {
-    console.log("Connecetd...");
-  }
+
+//post api login
+app.post("/login", (req, resp, next) => {
+  return login(req, resp);
 });
 
-//post api
-app.post("/login", (req, resp, next) => {
-  const query1 = `select * from admin where email='${req.body.email}'`;
-  con.query(query1, (err, data) => {
-    if (err) {
-      console.log("Error in query..", err);
-    }
-    let obj = {};
-    if (data && data.length != 0) {
-      const check = bcrypt.compareSync(req.body.passwd, data[0].passwd);
-      if (check) {
-        for (let item in data[0]) {
-          if (item != "passwd" && item != "isDelete" && item != "contact") {
-            obj[item] = data[0][item];
-          }
-        }
-        resp.status(200).json({
-          status: "success",
-          data: obj,
-        });
-      } else {
-        resp.status(401).json({
-          status: "Unauthorized",
-          msg: "Invalid password",
-          data: obj,
-        });
-      }
-    } else {
-      resp.status(401).json({
-        status: "Unauthorized",
-        msg: "Invalid email",
-        data: obj,
-      });
-    }
-  });
+app.get("/assetGetCategory", (req, resp) => {
+  return getCategory(req, resp);
 });
+
+app.post("/assetCreateCategory", (req, resp) => {
+  return postCategory(req, resp);
+});
+
+app.put("/deleteCategory/:id",(req,resp)=>{
+  return deleteCategory(req,resp);
+})
+
+app.put("/editCategory/:id",(req,resp)=>{
+  return editCategory(req,resp);
+})
+
+app.post("/createEmployee", (req, resp) => {
+  return postEmployee(req, resp);
+});
+
+
 app.listen(3001);
+
+
+
