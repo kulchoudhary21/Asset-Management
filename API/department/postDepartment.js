@@ -1,7 +1,7 @@
 const con = require("../../database/connection");
-function postCategory(req, resp) {
+function CreateDepartment(req, resp) {
   // console.log(req.body);
-  const query = `insert into assetCategory(isDelete,asset) values('${req.body.isDelete}','${req.body.assetCategory}');`;
+  const query = `insert into department(isDelete,department) values('${req.body.isDelete}','${req.body.assetCategory}');`;
   con.query(query, (err, data) => {
     if (err) {
       console.log("Error in query..", err);
@@ -21,4 +21,4 @@ function postCategory(req, resp) {
     }
   });
 }
-module.exports = postCategory;
+module.exports = CreateDepartment;

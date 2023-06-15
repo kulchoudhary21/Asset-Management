@@ -1,7 +1,9 @@
 const con=require("../../database/connection")
 function postEmployee(req,resp){
-    const query="insert into employees(name,gender,department,records) values(?,?,?,0);"
-    con.query(query,[req.body.name,req.body.gender,req.body.depart],(err,data)=>{
+  console.log("HEllo")
+  console.log("edee-------",req.body)
+    let query="insert into employees(name,department,gender,records,isDelete) values(?,?,?,?,0);"
+    con.query(query,[req.body.name,req.body.department,req.body.gender,req.body.isDelete],(err,data)=>{
        if (err) {
         console.log("Error in query..", err);
       } else {
@@ -14,7 +16,22 @@ function postEmployee(req,resp){
             status: "Unauthorized",
           });
         }
-      }
+      }   
     })
 }
 module.exports=postEmployee;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

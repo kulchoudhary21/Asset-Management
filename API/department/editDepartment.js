@@ -1,12 +1,14 @@
 const con = require("../../database/connection");
-function postCategory(req, resp) {
-  // console.log(req.body);
-  const query = `insert into assetCategory(isDelete,asset) values('${req.body.isDelete}','${req.body.assetCategory}');`;
+function EditDepartment(req, resp) {
+  const id = req.params.id;
+  // console.log("edit me ",req.body)
+  const query = `UPDATE department SET department = '${req.body.assetCategory}' WHERE id=${id};`;
   con.query(query, (err, data) => {
     if (err) {
       console.log("Error in query..", err);
-      resp.status(401).json({
-        status: "Unauthorized",
+      resp.status(400).json({
+        error: {},
+        message: "Please provide user and user_id",
       });
     } else {
       if (data) {
@@ -21,4 +23,13 @@ function postCategory(req, resp) {
     }
   });
 }
-module.exports = postCategory;
+module.exports = EditDepartment;
+
+
+
+
+
+
+
+
+
