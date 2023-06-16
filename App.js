@@ -15,6 +15,10 @@ const DeleteEmployee = require("./API/employee/deleteEmployee");
 const CreateEmployee = require("./API/employee/postEmployee");
 const EditEmployee = require("./API/employee/editEmployee");
 const GetEmployee = require("./API/employee/getEmployee");
+const DeleteAssign = require("./API/assign/deleteAssign");
+const CreateAssign = require("./API/assign/postAssign");
+const EditAssign = require("./API/assign/editAssign");
+const GetAssign = require("./API/assign/getAssign");
 
 const corsOption = {
   credentials: true,
@@ -80,6 +84,23 @@ app.put("/deleteEmployee/:id", (req, resp) => {
 
 app.put("/editEmployee/:id", (req, resp) => {
   return EditEmployee(req, resp);
+});
+
+//***Assign****
+app.get("/getAssign", (req, resp) => {
+  return GetAssign(req, resp);
+});
+
+app.post("/createAssign", (req, resp) => {
+  return CreateAssign(req, resp);
+});
+
+app.put("/deleteAssign/:id", (req, resp) => {
+  return DeleteAssign(req, resp);
+});
+
+app.put("/editAssign/:id", (req, resp) => {
+  return EditAssign(req, resp);
 });
 //---End---
 app.listen(3001);
