@@ -1,6 +1,6 @@
 const con = require("../../database/connection");
 function GetDepartment(req, resp) {
-  const query = "select * from department";
+  const query = "select * from department where isDelete='false'";
   con.query(query, (err, data) => {
     if (data) {
       if (err) {

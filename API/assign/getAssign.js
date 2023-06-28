@@ -1,6 +1,6 @@
 const con = require("../../database/connection");
 function getAssign(req, resp) {
-  const query = "select * from assign";
+  const query = 'select * from assign where isDelete="false"';
   con.query(query, (err, data) => {
     if (data) {
       if (err) {

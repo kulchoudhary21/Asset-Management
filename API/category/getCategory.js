@@ -1,12 +1,11 @@
 const con = require("../../database/connection");
 function getCategory(req, resp) {
-  const query = "select * from assetCategory";
+  const query = "select * from assetCategory where isDelete='false'";
   con.query(query, (err, data) => {
     if (data) {
       if (err) {
         console.log("Error :", err);
       } else {
-        // console.log("------", data);
         if (data) {
           resp.status(200).json({
             status: "success",

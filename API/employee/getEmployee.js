@@ -1,6 +1,6 @@
 const con = require("../../database/connection");
 function GetEmployee(req, resp) {
-  const query = "select * from employees";
+  const query = "select * from employees where isDelete='false'";
   con.query(query, (err, data) => {
     if (data) {
       if (err) {
